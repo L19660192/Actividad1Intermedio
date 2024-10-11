@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Tareas</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #e9ecef; /* Color de fondo */
+            text-align: center;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-color: #007bff; /* Color azul */
+            color: white;
+            padding: 20px;
+            border-radius: 5px 5px 0 0; /* Bordes redondeados en la parte superior */
+        }
+
+        h1 {
+            margin: 0; /* Eliminar margen del título */
+        }
+
+        /* Estilo del input y el botón de agregar tarea */
+        #nuevaTarea {
+            padding: 10px;
+            width: 300px;
+            border: 1px solid #ced4da; /* Borde gris claro */
+            border-radius: 5px; /* Bordes redondeados */
+            margin-right: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Sombra suave */
+        }
+
+        button {
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px; /* Bordes redondeados */
+            background-color: #28a745; /* Color verde */
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s; /* Transición suave */
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Sombra */
+        }
+
+        button:hover {
+            background-color: #218838; /* Color verde más oscuro al pasar el ratón */
+        }
+
+        /* Estilo de la lista de tareas */
+        ul {
+            list-style-type: none; /* Sin viñetas */
+            padding: 0; /* Sin padding */
+            margin: 20px 0; /* Margen en la parte superior e inferior */
+        }
+
+        li {
+            display: flex; /* Flexbox para alinear elementos */
+            justify-content: space-between; /* Espacio entre los elementos */
+            align-items: center; /* Centrar verticalmente */
+            padding: 10px;
+            margin: 5px 0;
+            background-color: white; /* Fondo blanco para cada tarea */
+            border-radius: 5px; /* Bordes redondeados */
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Sombra suave */
+            transition: transform 0.2s; /* Transición suave al pasar el ratón */
+        }
+
+        li:hover {
+            transform: scale(1.02); /* Aumentar ligeramente el tamaño al pasar el ratón */
+        }
+
+        .completada {
+            text-decoration: line-through;
+            color: gray;
+        }
+
+        /* Botón de eliminar */
+        .eliminar {
+            background-color: #dc3545; /* Color rojo */
+        }
+
+        .eliminar:hover {
+            background-color: #c82333; /* Color rojo más oscuro al pasar el ratón */
+        }
+
+        footer {
+            margin-top: 20px;
+            padding: 10px;
+            color: #6c757d; /* Color gris */
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Lista de Tareas</h1>
+    </header>
+
+    <div>
+        <!-- Campo para añadir nuevas tareas -->
+        <input type="text" id="nuevaTarea" placeholder="Agregar una nueva tarea">
+        <button onclick="agregarTarea()">Agregar</button>
+    </div>
+
+    <!-- Lista de tareas -->
+    <ul id="listaTareas"></ul>
+
+    <footer>
+        <p>© 2024 Tu Aplicación de Tareas</p>
+    </footer>
+
+    <script>
+        // Array que almacenará las tareas
+        let tareas = [];
+
+        // Función para agregar una nueva tarea
+        function agregarTarea() {
+            const input = document.getElementById('nuevaTarea');
+            const tarea = input.value.trim();
+
+            if (tarea !== "") {
+                tareas.push({ texto: tarea, completada: false });
+                input.value = ""; // Limpiar el campo de entrada
+                actualizarLista();
+            }
+        }
+
+        // Función para eliminar una tarea
+        function eliminarTarea(indice) {
+            tareas.splice(indice, 1); // Eliminar la tarea del array
+            actualizarLista();
+        }
+
+        // Función para marcar una tarea como completada o no
+        function toggleCompletada(indice) {
+            tareas[indice].completada = !tareas[indice].completada; // Alternar el estado de completada
+            actualizarLista();
+        }
+
+        // Función para actualizar la lista de tareas en el DOM
+        function actualizarLista() {
+            const lista = document.getElementById('listaTareas');
+            lista.innerHTML = ""; // Limpiar el contenido actual
+
+            // Recorrer el array de tareas y generar el HTML
+            tareas.forEach((tarea, indice) => {
+                const li = document.createElement('li');
+                li.className = tarea.completada ? "completada" : "";
+
+                li.innerHTML = `
+                    <span onclick="toggleCompletada(${indice})">${tarea.texto}</span>
+                    <button class="eliminar" onclick="eliminarTarea(${indice})">Eliminar</button>
+                `;
+                lista.appendChild(li);
+            });
+        }
+    </script>
+
+</body>
+</html>
